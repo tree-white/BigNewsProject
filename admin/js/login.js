@@ -44,6 +44,10 @@
             username: user,
             password: pwd
           },
+          // 加载前显示进度条
+          beforeSend: function () {
+            NProgress.start()
+          },
           success: function (response) {
             console.log(response);
             if (response.code === 200) {
@@ -57,6 +61,10 @@
               // alert(response.msg);
               showModal(response.msg);
             }
+          },
+          // 加载结束结束进度条
+          complete: function () {
+            NProgress.done();
           }
         });
 

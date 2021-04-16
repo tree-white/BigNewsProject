@@ -10,9 +10,17 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
+    <!-- 引入 NProgress 进度条的CSS文件 -->
+    <link rel="stylesheet" href="./libs/nprogress/css/nprogress.css">
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 导入bootstrap的js文件 -->
     <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 导入 index 的js文件 -->
+    <script src="./js/index.js"></script>
+    <!-- 引入 http 的js文件 -->
+    <script src="./js/http.js"></script>
+    <!-- 引入 NProgress 进度条的JS文件 -->
+    <script src="./libs/nprogress/js/nprogress.js"></script>
 </head>
 
 <body>
@@ -20,7 +28,7 @@
         <a href="#" class="logo"><img src="images/logo02.png" alt="logo"></a>
         <div class="user_info">
             <img src="images/2.jpg" alt="person">
-            <span>欢迎&nbsp;&nbsp;李思思</span>
+            <span>欢迎&nbsp;&nbsp;<strong>管理员</strong></span>
             <b>管理员</b>
         </div>
         <!-- 左侧导航栏 -->
@@ -54,5 +62,29 @@
 
         </div>
     </div>
+
+    <!-- bootstrap 模态框 -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"
+                            data-close="close">&times;</span></button>
+                    <h4 class="modal-title">温馨提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-default" data-dismiss="modal">关 闭</button> -->
+                    <button type="button" class="btn btn-primary" data-close="close">确 定</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+    </div><!-- /.modal -->
+
+
 </body>
+
 </html>
