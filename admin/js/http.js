@@ -5,7 +5,9 @@
     $.ajaxSetup({
         // 加载前显示进度条
         beforeSend: function () {
-            NProgress.start()
+            if (global .NProgress) {
+                NProgress.start()
+            }
         },
         // 每次都使用请求头
         // 注意点：如果局部也设置了请求头，不会覆盖，而是会在headers基础上再添加
@@ -27,7 +29,9 @@
         },
         // 加载结束结束进度条
         complete: function () {
-            NProgress.done();
+            if (global .NProgress) {
+                NProgress.done();
+            }
         }
     })
 

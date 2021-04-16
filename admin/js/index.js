@@ -39,7 +39,7 @@ $(function () {
     // }
   })
 
-  // 点击退出弹出提示，确定退出则清空 token 且退出页面，取消则不操作
+  // 2. 点击退出弹出提示，确定退出则清空 token 且退出页面，取消则不操作
   $('.logout').click(function (e) { 
     if (confirm('您确定要退出后台管理系统吗？')) {
       localStorage.removeItem('token')
@@ -47,7 +47,35 @@ $(function () {
     }
   });
 
+  // 3. 点击tab蓝切换类
+  // 3.1 一级菜单排他思想
+  $('.level01').click(function () {
+    $(this).addClass('active').siblings().removeClass('active')
 
+    // 3.2 文章管理二级菜单
+    if ($(this).next().hasClass('level02')) {
+
+      // 展开/收回二级菜单
+      $('.level02').slideToggle()
+      
+      if (!$('.level02').children().hasClass('active') && $('.level02').css('display') == 'block') {
+        $('.level02 li:first-child').addClass('active')
+      }
+
+
+      // 小三角旋转90deg
+      $(this).find('b').toggleClass('rotate0');
+    } else {
+      $('.level02 li').removeClass('active');
+    }
+
+  })
+
+  // 3.3 三级菜单点击也能排他切换
+  $('.level02 li').click(function () {
+    $(this).addClass('active').siblings().removeClass('active');
+  })
+  
 
 
 })
