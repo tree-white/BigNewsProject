@@ -5,7 +5,7 @@
     $.ajaxSetup({
         // 加载前显示进度条
         beforeSend: function () {
-            if (global .NProgress) {
+            if (global.NProgress) {
                 NProgress.start()
             }
         },
@@ -29,7 +29,7 @@
         },
         // 加载结束结束进度条
         complete: function () {
-            if (global .NProgress) {
+            if (global.NProgress) {
                 NProgress.done();
             }
         }

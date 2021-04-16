@@ -40,7 +40,7 @@ $(function () {
   })
 
   // 2. 点击退出弹出提示，确定退出则清空 token 且退出页面，取消则不操作
-  $('.logout').click(function (e) { 
+  $('.logout').click(function () { 
     if (confirm('您确定要退出后台管理系统吗？')) {
       localStorage.removeItem('token')
       location.href = './login.html';
@@ -57,11 +57,11 @@ $(function () {
 
       // 展开/收回二级菜单
       $('.level02').slideToggle()
-      
+
       if (!$('.level02').children().hasClass('active') && $('.level02').css('display') == 'block') {
         $('.level02 li:first-child').addClass('active')
+        
       }
-
 
       // 小三角旋转90deg
       $(this).find('b').toggleClass('rotate0');
@@ -76,6 +76,20 @@ $(function () {
     $(this).addClass('active').siblings().removeClass('active');
   })
   
+  // 4. 个人中心点击事件
+  $('#user').click(function () { 
+
+    $.ajax({
+      type: "get",
+      url: bigNews.user_detail,
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+      }
+    });
+    
+  });
+
 
 
 })
