@@ -13,7 +13,10 @@
 
 $(function () {
   // 1. 进入后台直接判断token是否正常
-  $.ajax({
+  // 刷新页面封装成一个函数
+  upload()
+  function upload() {
+    $.ajax({
     type: "get",
     url: bigNews.user_info,
     dataType: 'json',
@@ -37,7 +40,8 @@ $(function () {
     //     alert(error.responseJSON.msg)
     //     location.href = './login.html'
     // }
-  })
+    })
+  }
 
   // 2. 点击退出弹出提示，确定退出则清空 token 且退出页面，取消则不操作
   $('.logout').click(function () { 
@@ -75,4 +79,6 @@ $(function () {
   $('.level02 li').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
   })
+
+  w.upload = upload();
 })

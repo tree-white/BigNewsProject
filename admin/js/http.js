@@ -37,27 +37,33 @@
 
 
     // 需求二：把所有 ajax 请求的 url 地址封装到一个对象中管理
-    // 把基地址声明成一个变量
+    // 设置 基地址
     const baseUrl = 'http://localhost:8080/api/v1';
+    // 请求地址对象
     const bigNews = {
+        // 用户信息接口
         user_login:         `${baseUrl}/admin/user/login`,      // 1. 用户登录
         user_info:          `${baseUrl}/admin/user/info`,       // 2. 获取用户信息
         user_detail:        `${baseUrl}/admin/user/detail`,     // 3. 获取用户详情
         user_edit:          `${baseUrl}/admin/user/edit`,       // 4. 编辑用户信息
+        // 文章类别
         category_list:      `${baseUrl}/admin/category/list`,   // 5. 所有文章类别
         category_add:       `${baseUrl}/admin/category/add`,    // 6. 新增文章类别
         category_search:    `${baseUrl}/admin/category/search`, // 7. 根据id查询指定文章类别
         category_edit:      `${baseUrl}/admin/category/edit`,   // 8. 编辑文章类别
         category_delete:    `${baseUrl}/admin/category/delete`, // 9. 删除文章类别
+        // 文章内容
         article_query:      `${baseUrl}/admin/article/query`,   // 10.文章搜索
         article_publish:    `${baseUrl}/admin/article/publish`, // 11.发布文章
         article_search:     `${baseUrl}/admin/article/search`,  // 12.根据id获取文章信息
         article_edit:       `${baseUrl}/admin/article/edit`,    // 13.文章编辑
         article_delete:     `${baseUrl}/admin/article/delete`,  // 14.删除文章
+        // 数据内容
         data_info:          `${baseUrl}/admin/data/info`,       // 15.获取统计数据
         data_article:       `${baseUrl}/admin/data/article`,    // 16.日新增文章数量统计
         data_category:      `${baseUrl}/admin/data/category`,   // 17.各类型文章数量统计
         data_visit:         `${baseUrl}/admin/data/visit`,      // 18.日文章访问量
+        // 评论内容
         comment_search:     `${baseUrl}/admin/comment/search`,  // 19.文章评论搜索
         comment_pass:       `${baseUrl}/admin/comment/pass`,    // 20.评论审核通过
         comment_reject:     `${baseUrl}/admin/comment/reject`,  // 21.评论审核不通过
@@ -67,5 +73,11 @@
 
     // 把 bigNews 改成全局对象
     global.bigNews = bigNews;
+
+
+    // 3. 子父界面调用功能
+    const w = {}
+
+    global.w = w;
 
 })(window)
