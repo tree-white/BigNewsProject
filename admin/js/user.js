@@ -68,15 +68,12 @@ $(function () {
           // if (!$uploadPic.prop('src', initPic)) {
           //   $uploadPic.prop('src',initPic)
           // }
-          w.upload();
         }
 
       }
     });
     
   });
-
-
 
 })
 

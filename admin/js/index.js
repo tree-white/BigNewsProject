@@ -78,7 +78,14 @@ $(function () {
   // 3.3 三级菜单点击也能排他切换
   $('.level02 li').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
+    // 父级亮，其他不亮
+    $(this).parent().prev().addClass('active').siblings().removeClass('active')
   })
 
-  w.upload = upload();
+
+  // bug 修复
+  // 1. 点击右上角个人中心，左侧个人中心高亮，其他不高亮
+  $('.user_center_link a:first-child').click(function () {
+    $('#user').addClass('active').siblings().removeClass('active');
+  })
 })
