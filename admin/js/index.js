@@ -11,27 +11,23 @@
     | userPic  | string | 用户图片地址 |
 */
 
-$(function () {
-  // 1. 进入后台直接判断token是否正常
-  // 刷新页面封装成一个函数
-  upload()
-  function upload() {
-    $.ajax({
+// 函数封装
+// 1. 判断token并获取用户信息和渲染
+function upload() {
+  $.ajax({
     type: "get",
     url: bigNews.user_info,
-    dataType: 'json',
     // 已设置全局token请求头，此处可以取消
     // headers: {
     //   Authorization: localStorage.getItem('token')
     // },
     success: function (response) {
-      console.log(response);
       // 1.1 获取成功 - token正常则显示姓名头像
       if (response.code === 200) {
         const userPic = response.data.userPic;
         const nickname = response.data.nickname;
         $('.user_info strong').text(nickname);
-        $('[alt="person"]').prop('src',userPic);
+        $('[alt="person"]').prop('src', userPic);
       }
     },
     // 1.2 获取失败 - token 不正常则登录失败，让联系管理员
@@ -40,8 +36,22 @@ $(function () {
     //     alert(error.responseJSON.msg)
     //     location.href = './login.html'
     // }
-    })
-  }
+  })
+}
+
+// 2. 调用模态框封装
+function callModal(objData) {
+  $(objData.ele).modal({
+    keyboard: objData.keyboard,
+    backdrop: objData.backdrop
+  })
+  $(objData.ele + " .modal-body").text(objData.text)
+}
+
+// jQuery 入口函数
+$(function () {
+  // 1. 进入后台调用upload
+  upload();
 
   // 2. 点击退出弹出提示，确定退出则清空 token 且退出页面，取消则不操作
   $('.logout').click(function () { 

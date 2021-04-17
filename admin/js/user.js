@@ -1,82 +1,75 @@
 $(function () {
-
-  let userDetail = null
-
-  getDetail();
+  // 功能1 - 获取用户信息并实现渲染
+  // 1.1 封装页面加载获个人信息以及渲染
   function getDetail() {
-      $.ajax({
-    type: "get",
-    url: bigNews.user_detail,
-    dataType: "json",
-    success: function (response) {
-      console.log(response);
-      userDetail = response.data
-      // $('#inputEmail1').val(response.data.nickname);      // 用户名称
-      // $('#inputEmail2').val(response.data.username);      // 昵称
-      // $('#inputEmail3').val(response.data.email);         // 邮箱
-      // $('.user_pic').prop('src', response.data.userPic);  // 用户图标
-      // $('#inputEmail4').val(response.data.password);      // 用户密码
-      for (let key in response.data) {
-        // console.log(key);
-        // console.log(`[name=${key}]`);
-        $(`input.${key}`).val(response.data[key])
-        $('.user_pic').prop('src', response.data.userPic);  // 用户图标
-      }
-    }
-  });
-  }
-
-  let flag = false
-  let file = null;
-  $('#exampleInputFile').on('change',function () {
-    console.log('改变了');
-    flag = true
-    // console.dir(this);
-    file = this.files[0];
-    let urlPic = URL.createObjectURL(file)
-    console.log(urlPic);
-    $(this).siblings('label').children('img').prop('src',urlPic)
-    
-  })
-
-  $('.btn-edit').click(function (e) { 
-    e.preventDefault();
-    const fd = new FormData();
-    // console.log(fd);
-    for (let key in userDetail) {
-      // console.log(key);
-      if (flag && key == 'userPic') {
-        fd.append(key, file)
-      }
-      fd.append(key, $(`input.${key}`).val())
-    }
-
     $.ajax({
-      type: "post",
-      url: bigNews.user_edit,
-      contentType: false,
-      processData: false,
-      data: fd,
+      type: "get",
+      url: bigNews.user_detail,
       dataType: "json",
       success: function (response) {
-        console.log(response);
-        if (response.code == 200) {
-          alert(response.msg)
-          getDetail();
-          $('.user_pic').siblings('label').children('img').prop('src','./images/uploads_icon.jpg')
-          // let initPic = './images/uploads_icon.jpg';
-          // if (!$uploadPic.prop('src', initPic)) {
-          //   $uploadPic.prop('src',initPic)
-          // }
+        // 优化上面代码 - 使用对象遍历 for...in
+        for (let key in response.data) {
+          $(`input.${key}`).val(response.data[key])
         }
+        $('.user_pic').prop('src', response.data.userPic); // 用户图标
 
       }
     });
+  }
+  // 1.2 调用数据渲染
+  getDetail();
 
-    // 修改个人中心后整个页面刷新
-    window.parent.location.reload()
-    
+  // 功能2 - 本地预览修改的头像
+  // 2.1 给上传文件的file按钮绑定事件 - 状态变化就触发，实现要上传的图片预览
+  $('#exampleInputFile').on('change', function () {
+    // 获取浏览器本地慌促中的文件路径(特殊路径)
+    let urlPic = URL.createObjectURL(this.files[0]);
+    // console.log(urlPic); // 打印测试图片路径
+    $('img.user_pic').prop('src', urlPic)
+  })
+
+  // 功能3 - 修改个人信息 - 优化后
+  // 3.1 绑定点击事件，点击“修改”触发
+  $('.btn-edit').click(function (e) {
+    // 阻止 submit 默认行为
+    e.preventDefault();
+    // 在 xhr2 阶段 添加了 FormData 可用于图片上传 - 对象格式。
+    // 点击后获取当前按钮所在的 form表单域创建成一个 fd
+    const fd = new FormData(this.form);
+    // 把修改好的内容发送到服务器
+    $.ajax({
+      type: "post",
+      url: bigNews.user_edit,
+      contentType: false, // 取消post默认请求头
+      processData: false, // 取消data自动转换字符串
+      data: fd,
+      success: function (response) {
+        console.log(response);
+        // 判断是否发送成功
+        if (response.code == 200) {
+          $('.modal').modal()
+          getDetail();
+          // 调用父窗口的数据刷新
+          window.parent.upload()
+          window.parent.callModal({
+            ele: "#userCenter", // 模态框的id，在index页面里
+            text: "个人信息修改成功" // 模态框的提示信息
+          })
+        } else {
+          window.parent.callModal({
+            ele: "#userCenter", // 模态框的id，在index页面里
+            text: response.msg // 模态框的提示信息
+          })
+        }
+      },
+      error: function (error) {
+        window.parent.callModal({
+          ele: "#userCenter", // 模态框的id，在index页面里
+          text: '修改失败，请检查修改的内容是否有为空' // 模态框的提示信息
+        })
+      }
+    });
   });
 
-})
 
+})

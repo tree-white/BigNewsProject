@@ -1,7 +1,7 @@
 // 沙箱模式
 (function (global) {
     // 需求一：设置全局ajax
-    // 1. 每次发送 ajax 请求前，添加请求头
+    // 1.1 每次发送 ajax 请求前，添加请求头
     $.ajaxSetup({
         // 加载前显示进度条
         beforeSend: function () {
@@ -16,12 +16,13 @@
         },
         // 获取失败，提示错误信息内容
         error: function (error) {
-            // error.responseJSON.msg
-            $('#myModal').modal({
+            // 调用 index 封装的模态框函数
+            callModal({
+                ele: "#myModal",
+                text: error.responseJSON.msg,
                 keyboard: false,
                 backdrop: false
-            });
-            $('.modal-body').text(error.responseJSON.msg);
+            })
             // 点击确定或X返回登录界面
             $('[data-close="close"]').click(function () {
                 location.href = './login.html'
@@ -35,11 +36,10 @@
         }
     })
 
-
     // 需求二：把所有 ajax 请求的 url 地址封装到一个对象中管理
-    // 设置 基地址
+    // 2.1 设置 基地址
     const baseUrl = 'http://localhost:8080/api/v1';
-    // 请求地址对象
+    // 2.2 封装请求地址对象
     const bigNews = {
         // 用户信息接口
         user_login:         `${baseUrl}/admin/user/login`,      // 1. 用户登录
@@ -70,14 +70,7 @@
         comment_delete:     `${baseUrl}/admin/comment/delete`,  // 22.删除评论
 
     }
-
-    // 把 bigNews 改成全局对象
+    // 2.3 把 bigNews 改成全局对象
     global.bigNews = bigNews;
-
-
-    // 3. 子父界面调用功能
-    const w = {}
-
-    global.w = w;
 
 })(window)
