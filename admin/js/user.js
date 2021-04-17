@@ -72,6 +72,9 @@ $(function () {
 
       }
     });
+
+    // 修改个人中心后整个页面刷新
+    window.parent.location.reload()
     
   });
 
