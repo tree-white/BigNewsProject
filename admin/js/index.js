@@ -75,21 +75,4 @@ $(function () {
   $('.level02 li').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
   })
-  
-  // 4. 个人中心点击事件
-  $('#user').click(function () { 
-
-    $.ajax({
-      type: "get",
-      url: bigNews.user_detail,
-      dataType: "json",
-      success: function (response) {
-        console.log(response);
-      }
-    });
-    
-  });
-
-
-
 })
