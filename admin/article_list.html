@@ -16,6 +16,8 @@
     <script src="./libs/template-web.js"></script>
     <!-- 引入 bootstrap 的js文件 -->
     <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 引入JQ分页插件的js文件 -->
+    <script src="./libs/jquery.twbsPagination.js"></script>
     <!-- 引入沙箱js -->
     <script src="./js/http.js"></script>
     <!-- 引入对应的js文件 -->
@@ -76,25 +78,7 @@
                 </tbody>
             </table>
             <div class="row text-center">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li>
-                            <a href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li>
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                <ul id="pagination-demo" class="pagination-sm"></ul>
             </div>
         </div>
     </div>

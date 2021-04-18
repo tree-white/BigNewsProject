@@ -16,13 +16,15 @@ function updateType() {
   });
 }
 
-// 2. 刷新渲染list列表数据
-function updateList(key = '', page = '', perpage = 10) {
-  let type = $('#selCategory').val(); // 文章分类 id 值获取           空=所有类型文章
-  let state = $('#selStatus').val(); // 文章的状态 “所有/草稿/已发布”  空=所有状态
-  // key      文章搜索的 “关键字”   空=某类型的所有文章
-  // page     当前页              空=第1页
-  // perpage  每页显示的条数        空=6
+// 2. 刷新渲染list列表数据(包括分页)
+function updateList(updateData = {}) {
+  const key = updateData.key || '' // 文章搜索的 “关键字” - 空=某类型的所有文章
+  const page = updateData.page || '' // 当前页 - 空=第1页
+  const perpage = updateData.perpage || 10 // 每页显示的条数 - 空=6
+  const type = updateData.type || $('#selCategory').val(); // 文章分类 id 值获取 - 空=所有类型文章
+  const state = updateData.state || $('#selStatus').val(); // 文章的状态 “所有/草稿/已发布” - 空=所有状态
+  const visiblePages = updateData.visiblePages || 10 // 分页默认显示页数 - 空=10
+  const startPage = updateData.startPage || 1 // 默认分页选择第一个
 
   // 向服务器发起文章搜索
   $.ajax({
@@ -37,14 +39,44 @@ function updateList(key = '', page = '', perpage = 10) {
     },
     dataType: "json",
     success: function (response) {
-      console.log(response);
+      console.log(response); // 此时执行次数
       // 返回成功则渲染数据到页面中
       if (response.code == 200) {
         // 渲染列表
         const htmlStr = template('listTr', response.data)
         $('tbody').html(htmlStr)
-        // 渲染分页
-        // const pagingStr = template('paging',)
+
+        // 渲染刷新分页
+        if (response.data.totalCount || response.data.totalPage) {
+          $('#pagination-demo').twbsPagination('destroy')
+          $('#pagination-demo').twbsPagination({
+            // 总页数
+            totalPages: response.data.totalPage,
+            // 显示的页数
+            visiblePages: visiblePages,
+            // 当前页
+            startPage: startPage,
+            // 按钮说明
+            first: '首页',
+            prev: '上一页',
+            next: '下一页',
+            last: '尾页',
+            onPageClick: function (event, page) {
+              // console.log(startPage, '和',page);
+              console.log();
+              // 因为会死循环，所以当前页 /= 点击页的时候，才获取
+              if (startPage != page) {
+                  updateList({
+                    page: page,
+                    startPage: page,
+                  })
+              }
+            }
+          });
+        } else {
+          $('#pagination-demo').twbsPagination('destroy')
+        }
+
       }
     }
   });
@@ -76,8 +108,6 @@ $(function () {
   // 刷新页面触发一次刷新
   updateList();
 
-
-
   // 功能：获取列表数据
   $('#btnSearch').click(function (e) {
     // 清除按钮在表单域内的默认行为
@@ -85,14 +115,14 @@ $(function () {
     updateList();
   });
 
-
   // 功能：发表文章-点击事件
+
 
   // 功能：删除提示
   $('tbody').on('click', '.delete', function () {
     // 获取当前的 data-id
     const id = $(this).attr('data-id')
-    $('#articleListModal .modal-footer button').eq(1).attr('data-id',id)
+    $('#articleListModal .modal-footer button').eq(1).attr('data-id', id)
     console.log(id);
     // 弹出提示 是否确定删除
     globalModal({
@@ -108,6 +138,8 @@ $(function () {
   $('#articleListModal .modal-footer button').eq(1).click(function () {
     console.log('点击了确定');
   })
+
+  // JQ插件分液器代码调用
 
 
 })
