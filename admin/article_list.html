@@ -13,6 +13,10 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 引入模板引擎js文件 -->
     <script src="./libs/template-web.js"></script>
+    <!-- 引入沙箱js -->
+    <script src="./js/http.js"></script>
+    <!-- 引入对应的js文件 -->
+    <script src="./js/article_list.js"></script>
 </head>
 
 <body>
@@ -73,5 +77,13 @@
         </div>
     </div>
 </body>
+
+<!-- 定义 文章类别列表下拉框 模版 -->
+<script id="cateOption" type="text/html">
+        <option value="">所有分类</option>
+    {{ each data}}
+        <option value="{{ $value.id }}">{{ $value.name }}</option>
+    {{ /each }}
+</script>
 
 </html>
