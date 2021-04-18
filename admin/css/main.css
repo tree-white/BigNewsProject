@@ -388,6 +388,10 @@ body{
     padding-bottom:20px;
     margin-bottom:20px;
 }
+.common_con .id {
+    width: 50px;
+    text-align: center;
+}
 .opt_btns{
     margin-top:20px;
 }

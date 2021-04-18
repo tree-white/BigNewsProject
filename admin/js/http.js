@@ -36,6 +36,7 @@
         }
     })
 
+    
     // 需求二：把所有 ajax 请求的 url 地址封装到一个对象中管理
     // 2.1 设置 基地址
     const baseUrl = 'http://localhost:8080/api/v1';
