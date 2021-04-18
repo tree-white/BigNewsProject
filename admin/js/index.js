@@ -59,9 +59,10 @@ $(function () {
       // 展开/收回二级菜单
       $('.level02').slideToggle()
 
+      // 默认文章管理打开第一个高亮
       if (!$('.level02').children().hasClass('active') && $('.level02').css('display') == 'block') {
-        $('.level02 li:first-child').addClass('active')
-        
+        $('.level02 li:first-child').addClass('active');
+        $('.level02 li:first-child a')[0].click();
       }
 
       // 小三角旋转90deg
