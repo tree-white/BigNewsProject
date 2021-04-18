@@ -171,4 +171,6 @@ $(function () {
 
 
   });
+
+  window.parent.window.callModal;
 })

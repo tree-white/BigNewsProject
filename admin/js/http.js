@@ -16,17 +16,21 @@
         },
         // 获取失败，提示错误信息内容
         error: function (error) {
-            // 调用 index 封装的模态框函数
-            callModal({
-                ele: "#myModal",
-                text: error.responseJSON.msg,
-                keyboard: false,
-                backdrop: false
-            })
-            // 点击确定或X返回登录界面
-            $('[data-close="close"]').click(function () {
-                location.href = './login.html'
-            })
+            // console.log(error);
+            if (error.status == 403 && global.callModal) {
+                // 调用 index 封装的模态框函数
+                callModal({
+                    ele: "#myModal",
+                    text: error.responseJSON.msg,
+                    keyboard: false,
+                    backdrop: false
+                })
+                // 点击确定或X返回登录界面
+                $('[data-close="close"]').click(function () {
+                    location.href = './login.html'
+                })
+            }
+
         },
         // 加载结束结束进度条
         complete: function () {

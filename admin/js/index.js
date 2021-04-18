@@ -1,16 +1,3 @@
-/* 
-  目标：用户信息功能，进入首页后直接通过 ajax 发请求获取用户信息（头像和名称）
-  接口：获取用户信息
-    请求地址：/admin/user/info
-    请求方式：get
-    请求参数：无
-    返回数据：
-    |   名称   |  类型  | 说明         |
-    | :------: | :----: | ------------ |
-    | nickname | string | 用户昵称     |
-    | userPic  | string | 用户图片地址 |
-*/
-
 // 函数封装
 // 1. 判断token并获取用户信息和渲染
 function upload() {
@@ -92,6 +79,11 @@ $(function () {
     $(this).parent().prev().addClass('active').siblings().removeClass('active')
   })
 
+  // 4. 点击大事件logo刷新页面
+  $('.logo').click(function (e) { 
+    e.preventDefault();
+    window.location.reload();
+  });
 
   // bug 修复
   // 1. 点击右上角个人中心，左侧个人中心高亮，其他不高亮
