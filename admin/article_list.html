@@ -10,9 +10,12 @@
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/iconfont.css">
     <link rel="stylesheet" href="./css/main.css">
-    <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 引入模板引擎js文件 -->
+    <script src="./libs/jquery-1.12.4.min.js"></script>
+    <!-- 引入模版引擎 -->
     <script src="./libs/template-web.js"></script>
+    <!-- 引入 bootstrap 的js文件 -->
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
     <!-- 引入沙箱js -->
     <script src="./js/http.js"></script>
     <!-- 引入对应的js文件 -->
@@ -73,17 +76,110 @@
                 </tbody>
             </table>
             <div class="row text-center">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
+
+    <!-- 系统提示通用模态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="articleListModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <!-- 标题 -->
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 提示内容 -->
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </body>
 
 <!-- 定义 文章类别列表下拉框 模版 -->
 <script id="cateOption" type="text/html">
-        <option value="">所有分类</option>
+    <option value="">所有分类</option>
     {{ each data}}
-        <option value="{{ $value.id }}">{{ $value.name }}</option>
+    <option value="{{ $value.id }}">{{ $value.name }}</option>
     {{ /each }}
+
+</script>
+
+<!-- 定义 列表页面渲染 模版 -->
+<script id="listTr" type="text/html">
+    {{ each data }}
+    <tr>
+        <!-- 标题 title -->
+        <td>{{ $value.title }}</td>
+        <!-- 作者 author -->
+        <td>{{ $value.author }}</td>
+        <!-- 分类 category -->
+        <td>{{ $value.category }}</td>
+        <!-- 发表事件 date -->
+        <td class="text-center">{{ $value.date }}</td>
+        <!-- 状态 state-->
+        <td class="text-center">{{ $value.state }}</td>
+        <!-- 操作 -->
+        <td class="text-center">
+            <!-- 编辑是以打开新页面 article_edit.html 的方式编辑 -->
+            <!-- 难点：如何把文章的 id 传递到新打开的页面中 -->
+            <!-- 技术点：页面链接?参数=值 -->
+            <a href="article_edit.html?id={{ $value.id }}" class="btn btn-default btn-xs">编辑</a>
+            <a href="javascript:void(0);" data-id="{{ $value.id }}" class="btn btn-danger btn-xs delete">删除</a>
+        </td>
+    </tr>
+    {{ /each }}
+
+</script>
+
+<!-- 定义 列表页面分页 模版 -->
+<script id="paging" type="text/html">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
 </script>
 
 </html>
