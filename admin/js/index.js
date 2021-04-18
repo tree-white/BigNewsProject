@@ -27,12 +27,16 @@ function upload() {
 }
 
 // 2. 调用模态框封装
-function callModal(objData) {
-  $(objData.ele).modal({
-    keyboard: objData.keyboard,
-    backdrop: objData.backdrop
+function callModal() {
+  $("#myModal").modal({
+    keyboard: false,
+    backdrop: false
   })
-  $(objData.ele + " .modal-body").text(objData.text)
+  $("#myModal .modal-body").text('您还未登录，请先登录！')
+  // 点击关闭或x调回登录页面
+  $('[data-close="close"]').click(function () {
+    location.href = './login.html'
+  })
 }
 
 // jQuery 入口函数

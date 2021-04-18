@@ -17,20 +17,29 @@
         // 获取失败，提示错误信息内容
         error: function (error) {
             // console.log(error);
-            if (error.status == 403 && global.callModal) {
-                // 调用 index 封装的模态框函数
-                callModal({
-                    ele: "#myModal",
-                    text: error.responseJSON.msg,
-                    keyboard: false,
-                    backdrop: false
-                })
-                // 点击确定或X返回登录界面
-                $('[data-close="close"]').click(function () {
-                    location.href = './login.html'
-                })
+            switch (error.status) {
+                case 400:
+                    // article_category 页面提示
+                    warmPrompt && warmPrompt(error.responseJSON.msg, 'danger')
+                    break;
+                
+                case 401:
+                    break;
+                
+                case 403:
+                    // index
+                    global.callModal && global.callModal()
+                    // 所有子级盒子iframe打开的页面
+                    global.parent.callModal && global.parent.callModal()
+                    break;
+                
+                case 404:
+                    console.log(error);
+                    break;
+                    
+                
+                
             }
-
         },
         // 加载结束结束进度条
         complete: function () {
