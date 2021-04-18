@@ -19,8 +19,11 @@
             // console.log(error);
             switch (error.status) {
                 case 400:
-                    // article_category 页面提示
-                    warmPrompt && warmPrompt(error.responseJSON.msg, 'danger')
+                    console.log(error);
+                    // article_category 页面通用提示
+                    global.warmPrompt && global.warmPrompt(error.responseJSON.msg, 'danger')
+                    // user 页面的通用提示
+                    global.userModal && global.userModal('异常提示！',error.responseJSON.msg, 'danger')
                     break;
                 
                 case 401:
@@ -34,7 +37,6 @@
                     break;
                 
                 case 404:
-                    console.log(error);
                     break;
                     
                 

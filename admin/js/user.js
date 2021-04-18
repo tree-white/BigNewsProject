@@ -1,3 +1,20 @@
+// 函数封装
+
+// 1. 通用提示
+function userModal(title,msg, style = primary) {
+   msg = msg.indexOf('参数有问题') != -1 ?
+    `
+    1、修改内容不能有空！
+    <br />
+    2、请检查邮箱书写规格是否正确！
+    `: msg;
+
+  $('#userModal').modal();
+  $('#userModal .modal-title').text(title)
+  $('#userModal .modal-body p').html(msg)
+  $('#userModal .modal-footer button').attr('class',`btn btn-${style}`)
+}
+
 $(function () {
   // 功能1 - 获取用户信息并实现渲染
   // 1.1 封装页面加载获个人信息以及渲染
@@ -47,27 +64,12 @@ $(function () {
         console.log(response);
         // 判断是否发送成功
         if (response.code == 200) {
-          $('.modal').modal()
+          userModal('成功提示！',response.msg,'success')
           getDetail();
           // 调用父窗口的数据刷新
           window.parent.upload()
-          window.parent.callModal({
-            ele: "#userCenter", // 模态框的id，在index页面里
-            text: "个人信息修改成功" // 模态框的提示信息
-          })
-        } else {
-          window.parent.callModal({
-            ele: "#userCenter", // 模态框的id，在index页面里
-            text: response.msg // 模态框的提示信息
-          })
         }
       },
-      error: function (error) {
-        window.parent.callModal({
-          ele: "#userCenter", // 模态框的id，在index页面里
-          text: '修改失败，请检查修改的内容是否有为空' // 模态框的提示信息
-        })
-      }
     });
   });
 
