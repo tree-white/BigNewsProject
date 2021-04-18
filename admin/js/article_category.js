@@ -23,154 +23,73 @@ $(function () {
       }
     });
   }
-  // 1.1 首次刷新/渲染页面
+  // 需求：首次刷新/渲染页面
   updateCategory()
 
-  // 功能2：删除文章分类 - 由于是动态添加的数据，删除需要使用事件委托
-  $('#allCategory').on('click', '.btn-danger', function () {
-    // console.log('点击了删除按钮'); // 测试点击删除按钮
-    let that = this; // 由于点击内嵌套点击，所需要设置好指向问题
-    // 2.1 点击删除提示判断
-    $('#removeModal').modal();
-    // 2.2 点击了提示框的确定
-    $('#removeModal .btn-danger').click(function () {
-      // 2.2.1 则当前删除按钮，对应的父级 tr 整个删除
-      $(that).parents('tr').remove();
-      // 2.2.2 同时也删除服务器对应数据
-      $.ajax({
-        type: "post",
-        url: bigNews.category_delete,
-        data: {
-          id: $(that).parent().siblings('.id').attr('data-index') // 点击删除对应的id
-        },
-        error: function () {
-          $('#removeModal').modal('hide');
-          warmPrompt(error.responseJSON.msg)
-          updateCategory()
-        },
-        success: function (response) {
-          $('#removeModal').modal('hide');
-          // console.log(response);
-          warmPrompt('删除成功！')
-          updateCategory()
-        }
-      });
-    })
+  // 功能2：点击新增分类模态框初始化
+  $('#xinzengfenlei').click(function () {
+    // 弹出模态框
+    $('#addAndEdit').modal();
+    // 提交按钮变换为点击的按钮名
+    const str = $(this).text().trim();
+    $('.modal-footer button').eq(1).text(str).attr('class', 'btn btn-success')
   })
 
-  // 功能3：新增文章分类
-  $('#addModal .btn-primary').click(function () {
-    // console.log('点击了提交'); // 测试是否点击了提交
-    // 3.1 获取名称(name)和别名(slug)
-    const addName = $('.addName').text().trim()
-    const addSlug = $('.addSlug').text().trim()
-    // console.log(addName, addSlug);
-    if (addName && addSlug) {
-      // 3.2 如果都有内容，则上传到数据库新增数据
-      $.ajax({
-        type: "post",
-        url: bigNews.category_add,
-        data: {
-          name: addName,
-          slug: addSlug
-        },
-        error: function (error) {
-          warmPrompt(error.responseJSON.msg)
-        },
-        success: function (response) {
-          // console.log(response); // 测试是否能获取创建成功信息
-          // 创建成功 code == 201
-          if (response.code == 201) {
-            updateCategory(); // 刷新数据渲染
-            $('#addModal').modal('hide'); // 编辑的模态框隐藏
-            $('#addModal .addName').text(''); // 清空名称
-            $('#addModal .addSlug').text(''); // 清空别名
-            warmPrompt('新增成功！'); // 提示用户新增成功
-          }
-        }
-      });
-    } else {
-      warmPrompt('新增的“名称”或“别名”不能有空！')
-    }
+  // 功能3：点击编辑分类模态框初始化
+  $('#allCategory').on('click', '.text-center .btn-info', function () {
+    console.log('点击了编辑');
+    // 弹出模态框
+    $('#addAndEdit').modal();
+    const str = $(this).text().trim();
+    const editName = $(this).parent().prev().prev().text().trim();
+    const editSlug = $(this).parent().prev().text().trim();
+
+    $('#exampleInputName').val(editName)
+    $('#exampleInputSlug').val(editSlug)
+    $('.modal-footer button').eq(1).text(str).attr('class', 'btn btn-info')
   })
 
-  // 功能4：编辑文章分类 - 由于是动态添加的数据，编辑需要使用事件委托
-  let editId = 0;
-  $('#allCategory').on('click', '.btn-info', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    // console.log('点击了编辑'); // 测试编辑按钮是否正常
-    // 4.1 获取ID/名称(name)/别名(slug)
-    editId = $(this).parent().siblings('.id').attr('data-index') // 点击删除对应的id
-    // console.log(editId);
+  // 需求：模态框隐藏清空表单域内容
+  $('#addAndEdit').on('hide.bs.modal', function () {
+    // 表单域内容重置，需转换为dom元素
+    $('form')[0].reset();
+  })
 
-    // 4.2 获取初始值 - 方式一：根据ID查询指定文章类别
+  // 需求：点击提交按钮发送创建/编辑数据到服务器
+  $('.modal-footer button').eq(1).click(function () {
+    // console.log('点击了提交');
+    // 发送创建的数据
     $.ajax({
-      type: "get",
-      url: bigNews.category_search,
+      type: "post",
+      url: bigNews.category_add,
       data: {
-        id: editId
+        name: $("form input").eq(0).val().trim(),
+        slug: $("form input").eq(1).val().trim()
       },
+      dataType: "json",
+      // 返回错误
       error: function (error) {
-        warmPrompt('数据获取失败,请重试！')
+        $('#hintModal .modal-footer button').attr('class', 'btn btn-danger')
+        warmPrompt(error.responseJSON.msg)
       },
+      // 返回成功
       success: function (response) {
-        console.log(response);
-        if (response.code == 200) {
-          $('#editModal').modal();
-          // 通过服务器获取name值
-          $('#editModal .editName').text(response.data[0].name);
-          // 通过服务器获取slug值
-          $('#editModal .editSlug').text(response.data[0].slug); 
+        // console.log(response);
+        // 创建成功
+        if (response.code == 201) {
+          // 隐藏模态框
+          $('#addAndEdit').modal('hide');
+          // 设置提示框按钮颜色为绿色并弹出
+          $('#hintModal .modal-footer button').attr('class', 'btn btn-success')
+          warmPrompt(response.msg)
+          // 刷新页面数据
+          updateCategory();
         }
       }
     });
-
-    // 4.2 获取初始值 - 方式二：直接获取本地的内容
-    // $('#editModal').modal();
-    // $('#editModal .editName').text($(this).parent().prev().prev().text().trim()); 
-    // $('#editModal .editSlug').text($(this).parent().prev().text().trim());
   })
 
-  // 4.3 点击修改发送服务器修改数据
-  $('#editModal .btn-primary').click(function () {
-    // 获取编辑模态框对应的内容
-    let editName = $('#editModal .editName').text().trim()
-    let editSlog = $('#editModal .editSlug').text().trim()
-    // console.log('点击了提交'); // 测试是否点击了提交
 
-    if ($('.editName').text().trim() && $('.editSlug').text().trim()) {
-      $.ajax({
-        type: "post",
-        url: bigNews.category_edit,
-        dataType: "json",
-        data: {
-          id: editId,
-          name: editName,
-          slug: editSlog
-        },
-        error: function (error) {
-          warmPrompt(error.responseJSON.msg)
-          updateCategory(); // 刷新数据渲染
-        },
-        success: function (response) {
-          console.log(response); // 测试修改状态是否正常
-          if (response.code == 200) {
-            warmPrompt('修改成功！')
-            $('#editModal').modal('hide');
-            updateCategory(); // 刷新数据渲染
-          } else {
-            warmPrompt('修改失败，您是不是内容都没改动？')
-            updateCategory();
-          }
-        }
-      });
-    } else {
-      warmPrompt('名称(name)或别名(slug)不能有空哦！')
-    }
-
-
-  });
 
   window.parent.window.callModal;
 })

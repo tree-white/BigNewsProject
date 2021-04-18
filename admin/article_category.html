@@ -58,63 +58,27 @@
         </div>
     </div>
 
-    <!-- 新增类别 - 模态框 -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="addModal">
+    <!-- 新增/编辑类别 - 模态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="addAndEdit">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">新增分类</h4>
+                    <h4 class="modal-title">文章类别操作</h4>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-striped table-bordered table-hover mp20 category_table">
-                        <thead>
-                            <tr>
-                                <th>名称(name)</th>
-                                <th>别名(slug)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="addNewCategory">
-                            <tr>
-                                <td contenteditable="true" class="addName"></td>
-                                <td contenteditable="true" class="addSlug"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-                    <button type="button" class="btn btn-primary">提 交</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <!-- 编辑类别 - 模态框 -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="editModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">编辑分类</h4>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-striped table-bordered table-hover mp20 category_table">
-                        <thead>
-                            <tr>
-                                <th>名称(name)</th>
-                                <th>别名(slug)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="addNewCategory">
-                            <tr>
-                                <td contenteditable="true" class="editName"></td>
-                                <td contenteditable="true" class="editSlug"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <form autocomplete="off">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">名称(name)</label>
+                            <input type="email" class="form-control" id="exampleInputName" placeholder="请输入名称(不能为空)">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">别名(slug)</label>
+                            <input type="text" class="form-control" id="exampleInputSlug"
+                                placeholder="请输入别名(不能为空)">
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
@@ -138,26 +102,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">知道了</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <!-- 删除类别 - 模态框 -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="removeModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">温馨提示</h4>
-                </div>
-                <div class="modal-body">
-                    <p>您确定要删除此类别吗？</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-                    <button type="button" class="btn btn-danger">确 定</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
