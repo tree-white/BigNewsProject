@@ -7,7 +7,7 @@ function updateType() {
     url: bigNews.category_list,
     dataType: "json",
     success: function (response) {
-      console.log(response);
+      // console.log(response);
       if (response.code == 200) {
         const htmlStr = template('cateOption', response)
         $('#selCategory').html(htmlStr)
@@ -19,12 +19,12 @@ function updateType() {
 // 2. 刷新渲染list列表数据(包括分页)
 function updateList(updateData = {}) {
   const key = updateData.key || '' // 文章搜索的 “关键字” - 空=某类型的所有文章
-  const page = updateData.page || '' // 当前页 - 空=第1页
+  const startPage = updateData.startPage || 1 // 分页当前选项,空=第一页
+  // const page = updateData.page || '' // 当前页 - 空=第1页
   const perpage = updateData.perpage || 10 // 每页显示的条数 - 空=6
   const type = updateData.type || $('#selCategory').val(); // 文章分类 id 值获取 - 空=所有类型文章
   const state = updateData.state || $('#selStatus').val(); // 文章的状态 “所有/草稿/已发布” - 空=所有状态
   const visiblePages = updateData.visiblePages || 10 // 分页默认显示页数 - 空=10
-  const startPage = updateData.startPage || 1 // 默认分页选择第一个
 
   // 向服务器发起文章搜索
   $.ajax({
@@ -34,12 +34,12 @@ function updateList(updateData = {}) {
       key: key,
       type: type,
       state: state,
-      page: page,
+      page: startPage,
       perpage: perpage
     },
     dataType: "json",
     success: function (response) {
-      console.log(response); // 此时执行次数
+      // console.log(response); // 此时执行次数
       // 返回成功则渲染数据到页面中
       if (response.code == 200) {
         // 渲染列表
@@ -47,7 +47,7 @@ function updateList(updateData = {}) {
         $('tbody').html(htmlStr)
 
         // 渲染刷新分页
-        if (response.data.totalCount || response.data.totalPage) {
+        if (response.data.totalPage != visiblePages) {
           $('#pagination-demo').twbsPagination('destroy')
           $('#pagination-demo').twbsPagination({
             // 总页数
@@ -62,14 +62,11 @@ function updateList(updateData = {}) {
             next: '下一页',
             last: '尾页',
             onPageClick: function (event, page) {
-              // console.log(startPage, '和',page);
-              console.log();
               // 因为会死循环，所以当前页 /= 点击页的时候，才获取
               if (startPage != page) {
-                  updateList({
-                    page: page,
-                    startPage: page,
-                  })
+                updateList({
+                  startPage: page,
+                })
               }
             }
           });
@@ -106,17 +103,18 @@ $(function () {
   // 刷新文章分类
   updateType()
   // 刷新页面触发一次刷新
-  updateList();
+  updateList({
+    flag: true
+  });
 
   // 功能：获取列表数据
   $('#btnSearch').click(function (e) {
     // 清除按钮在表单域内的默认行为
     e.preventDefault();
-    updateList();
+    updateList({
+      flag: true
+    });
   });
-
-  // 功能：发表文章-点击事件
-
 
   // 功能：删除提示
   $('tbody').on('click', '.delete', function () {
@@ -136,10 +134,37 @@ $(function () {
   });
   // 点击了确定删除
   $('#articleListModal .modal-footer button').eq(1).click(function () {
-    console.log('点击了确定');
+    // console.log('点击了确定');
+    const index = $('.text-center .page-item.active').text().trim()
+    const id = $(this).attr('data-id')
+    // console.log('长度',$('tbody tr').length);
+    const l = $('tbody tr').length
+
+    $.ajax({
+      type: "post",
+      url: bigNews.article_delete,
+      data: {
+        id: id
+      },
+      dataType: "json",
+      success: function (response) {
+
+        console.log('删除成功 ', response);
+        if (response.code == 204) {
+          // console.log($('#pagination-demo').twbsPagination);
+          globalModal({
+            text: response.msg,
+            closeBtn: '知道了',
+            closeStyle: 'success',
+            sureBtnState: 'none'
+          })
+
+          updateList()
+        }
+      }
+    });
   })
 
-  // JQ插件分液器代码调用
 
 
 })
