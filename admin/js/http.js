@@ -23,7 +23,14 @@
                     // article_category 页面通用提示
                     global.warmPrompt && global.warmPrompt(error.responseJSON.msg, 'danger')
                     // user 页面的通用提示
-                    global.userModal && global.userModal('异常提示！',error.responseJSON.msg, 'danger')
+                    global.userModal && global.userModal('异常提示！', error.responseJSON.msg, 'danger')
+                    // article_edit and article_release 页面的通用提示
+                    global.globalModal && global.globalModal({
+                        title: '异常提示！',
+                        text: error.responseJSON.msg,
+                        closeBtn: '知道了',
+                        closeStyle: 'danger',
+                    })
                     break;
                 
                 case 401:

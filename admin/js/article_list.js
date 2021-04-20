@@ -99,7 +99,8 @@ function globalModal(modalState = {}) {
 
 // 入口函数
 $(function () {
-
+  // 进入当前页面，父元素对应的文章列表高亮
+  parent.$('.level02 li').eq(0).addClass('active').siblings().removeClass('active');
   // 刷新文章分类
   updateType()
   // 刷新页面触发一次刷新
@@ -165,6 +166,7 @@ $(function () {
     });
   })
 
+  // 功能：发表文章
 
 
 })

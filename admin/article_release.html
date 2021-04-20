@@ -10,30 +10,44 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="./libs/jedate/css/jedate.css">
     <!-- jq -->
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 模板引擎 -->
     <script src="./libs/template-web.js"></script>
+    <!-- 引入 bootstrap 的js文件 -->
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 引入 沙箱 的js文件 -->
+    <script src="./js/http.js"></script>
+    <!-- 引入 当前页面对应的js文件 -->
+    <script src="./js/article_release.js"></script>
+    <!-- 引入富文本内容 -->
+    <script src="./libs/tinymce/tinymce.min.js"></script>
+    <!-- 引入 jeDate 的js文件 -->
+    <script src="./libs/jedate/js/jedate.js"></script>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="common_title">
-            文章编辑
+            文章新增
         </div>
         <div class="container-fluid common_con">
-            <form class="form-horizontal article_form" id="form">
+            <form autocomplete="off" class="form-horizontal article_form" id="form">
                 <div class="form-group">
                     <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="text" name="title" class="form-control title" id="inputTitle" value="文章标题文字">
+                        <input type="text" name="title" class="form-control title" id="inputTitle" value=""
+                            placeholder="请输入文章标题">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputCover" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
-                        <img src="images/pic06.jpg" class="article_cover">
-                        <input name="cover" type="file" id="inputCover">
+                        <label for="inputCover">
+                            <img src="./images/uploads_icon.jpg" class="article_cover">
+                        </label>
+                        <input name="cover" type="file" style="display: none;" id="inputCover">
                     </div>
                 </div>
                 <div class="form-group">
@@ -51,22 +65,55 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">发布时间：</label>
                     <div class="col-sm-4">
+                        <input type="text" name="date" id="myDate" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
+                        <textarea id="myTextarea" placeholder="请编辑文章内容！"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success btn-release">发布</button>
+                        <button type="submit" class="btn btn-success btn-release">新增并发布</button>
                         <button type="submit" class="btn btn-default btn-draft">存为草稿</button>
+                        <span id="btnHint"></span>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- 系统提示通用模态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="articleListModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <!-- 标题 -->
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 提示内容 -->
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </body>
+
+<!-- 文章类别渲染 - 模版引擎 -->
+<script id="articleType" type="text/html">
+    <option value="">--请选择文章类别--</option>
+    {{ each data}}
+    <option value="{{ $value.id }}">{{ $value.name }}</option>
+    {{ /each }}
+</script>
 
 </html>

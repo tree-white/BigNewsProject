@@ -1,3 +1,22 @@
+// 函数封装
+// 1. 通用系统提示
+function globalModal(modalState = {}) {
+  const title = modalState.title || '温馨提示'
+  const text = modalState.text || '确定要进行操作吗？'
+  const closeBtn = modalState.closeBtn || '取 消'
+  const closeStyle = modalState.closeStyle || 'default'
+  const sureBtn = modalState.sureBtn || '确 定'
+  const sureStyle = modalState.sureStyle || 'primary'
+  const sureBtnState = modalState.sureBtnState || 'none'
+  $('#articleListModal').modal()
+  $('#articleListModal .modal-title').text(title)
+  $('#articleListModal .modal-body p').html(text)
+  $('#articleListModal .modal-footer button').eq(0).text(closeBtn).attr('class', `btn btn-${closeStyle}`)
+  $('#articleListModal .modal-footer button').eq(1).text(sureBtn).attr('class', `btn btn-${sureStyle}`).css({
+    display: sureBtnState
+  })
+}
+
 // 入口函数
 $(function () {
   // 启动富文本编辑器插件
@@ -119,16 +138,6 @@ $(function () {
     console.log(this);
     $(this).hasClass('btn-edit') && fd.append('state', '已发布')
     $(this).hasClass('btn-draft') && fd.append('state', '草稿')
-    // if ($(this).hasClass('btn-edit')) {
-    //   // console.log('点击了“修改”');
-    //   // 点击修改，则发布状态为数据传过来的状态
-    //   fd.append('state', '已发布')       // 添加 文章状态 以获取到的文章详细信息来决定
-
-    // } else if ($(this).hasClass('btn-draft')) {
-    //   // console.log('点击了“存为草稿”');
-    //   // 如果点击是“存为草稿”，则把状态直接改为草稿
-    //   fd.append('state', '草稿')       // 添加 文章状态 以获取到的文章详细信息来决定
-    // }
     console.log(fd);
 
     // 调用文章编辑接口
@@ -143,7 +152,13 @@ $(function () {
         console.log(response);
         if (response.code === 200) {
           // 弹出提示框告知结果
-          alert(`修改成功`)
+          alert('修改成功')
+          // globalModal({
+          //   title: '修改结果！',
+          //   text: '文章编辑修改成功！',
+          //   closeBtn: '知道了',
+          //   closeStyle: 'success'
+          // })
           // 然后返回列表页
           location.href = './article_list.html'
         }
