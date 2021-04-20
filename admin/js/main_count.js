@@ -93,10 +93,6 @@ function doughnutChart(arr) {
   const seriesData = arr.map(item => {
     return { value: item.articles, name: item.name }
   })
-  // 标签
-  const legendData = arr.map(item => {
-    return item.name
-  })
 
   option = {
     title: {
@@ -146,72 +142,40 @@ function doughnutChart(arr) {
 };
 
 // 3.柱状图
-function histogram() {
+function histogram(date, quantity) {
   // 基于准备好的dom，初始化echarts实例
-  var myChart2 = echarts.init(document.getElementById('column_show'));
+  const myChart = echarts.init(document.getElementById('column_show'));
 
-  option2 = {
+  option = {
     title: {
       left: 'center',
-      text: '分类访问量',
+      text: '日文章访问量',
+      top: '5%'
     },
+
     tooltip: {
       trigger: 'axis',
       axisPointer: { // 坐标轴指示器，坐标轴触发有效
         type: 'line' // 默认为直线，可选为：'line' | 'shadow'
       },
-
     },
-    legend: {
-      data: ['爱生活', '趣美味', '爱旅行', '爱电影', '爱游泳'],
-      top: 30
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: [{
+    xAxis: {
       type: 'category',
-      data: ['一月', '二月', '三月', '四月']
-    }],
-    yAxis: [{
+      boundaryGap: false,
+      data: date
+    },
+    yAxis: {
       type: 'value'
-    }],
-    color: ['#5885e8', '#13cfd5', '#00ce68', '#ff9565', '#20ff19'],
+    },
     series: [{
-      name: '爱生活',
-      type: 'bar',
-      data: [320, 332, 301, 334]
-    },
-    {
-      name: '趣美味',
-      type: 'bar',
-      data: [220, 132, 101, 134]
-    },
-    {
-      name: '爱旅行',
-      type: 'bar',
-      data: [220, 182, 191, 234]
-    },
-    {
-      name: '爱电影',
-      type: 'bar',
-      data: [150, 232, 201, 154]
-    },
-    {
-      name: '爱游泳',
-      type: 'bar',
-      data: [262, 118, 364, 426],
-    },
-
-    ]
+      data: quantity,
+      type: 'line',
+      areaStyle: {}
+    }]
   };
 
-
   // 使用刚指定的配置项和数据显示图表。
-  myChart2.setOption(option2);
+  myChart.setOption(option);
 };
 
 // 入口函数
@@ -260,18 +224,37 @@ $(function () {
     }
   });
 
-  // 3、各类文章数据统计 - 环形图 - 分类文章数量比
+  // 3、各类型文章数量统计 - 环形图 - 分类文章数量比
   $.ajax({
     type: "get",
     url: bigNews.data_category,
     dataType: "json",
     success: function (response) {
       console.log(response);
-      doughnutChart(response.date);
+      if (response.code === 200) {
+        doughnutChart(response.date)
+      }
     }
   });
 
-
-  histogram();          // 柱状图 - 分类访问量
+  // 4、日文章访问量- 面积图
+  $.ajax({
+    type: "get",
+    url: bigNews.data_visit,
+    dataType: "json",
+    success: function (response) {
+      // console.log(response);
+      if (response.code === 200) {
+        const newDate = []
+        const quantity = []
+        for (let key in response.data) {
+          newDate.unshift(key)
+          quantity.unshift(response.data[key])
+        }
+        // console.log(newDate, quantity);
+        histogram(newDate, quantity);
+      }
+    }
+  });
 
 })
