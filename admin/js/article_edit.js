@@ -1,21 +1,21 @@
 // 函数封装
-// 1. 通用系统提示
-function globalModal(modalState = {}) {
-  const title = modalState.title || '温馨提示'
-  const text = modalState.text || '确定要进行操作吗？'
-  const closeBtn = modalState.closeBtn || '取 消'
-  const closeStyle = modalState.closeStyle || 'default'
-  const sureBtn = modalState.sureBtn || '确 定'
-  const sureStyle = modalState.sureStyle || 'primary'
-  const sureBtnState = modalState.sureBtnState || 'none'
-  $('#articleListModal').modal()
-  $('#articleListModal .modal-title').text(title)
-  $('#articleListModal .modal-body p').html(text)
-  $('#articleListModal .modal-footer button').eq(0).text(closeBtn).attr('class', `btn btn-${closeStyle}`)
-  $('#articleListModal .modal-footer button').eq(1).text(sureBtn).attr('class', `btn btn-${sureStyle}`).css({
-    display: sureBtnState
-  })
-}
+// // 1. 通用系统提示
+// function globalModal(modalState = {}) {
+//   const title = modalState.title || '温馨提示'
+//   const text = modalState.text || '确定要进行操作吗？'
+//   const closeBtn = modalState.closeBtn || '取 消'
+//   const closeStyle = modalState.closeStyle || 'default'
+//   const sureBtn = modalState.sureBtn || '确 定'
+//   const sureStyle = modalState.sureStyle || 'primary'
+//   const sureBtnState = modalState.sureBtnState || 'none'
+//   $('#articleListModal').modal()
+//   $('#articleListModal .modal-title').text(title)
+//   $('#articleListModal .modal-body p').html(text)
+//   $('#articleListModal .modal-footer button').eq(0).text(closeBtn).attr('class', `btn btn-${closeStyle}`)
+//   $('#articleListModal .modal-footer button').eq(1).text(sureBtn).attr('class', `btn btn-${sureStyle}`).css({
+//     display: sureBtnState
+//   })
+// }
 
 // 入口函数
 $(function () {

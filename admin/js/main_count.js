@@ -230,7 +230,7 @@ $(function () {
     url: bigNews.data_category,
     dataType: "json",
     success: function (response) {
-      console.log(response);
+      // console.log(response);
       if (response.code === 200) {
         doughnutChart(response.date)
       }
